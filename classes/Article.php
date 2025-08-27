@@ -162,17 +162,35 @@ class Article {
         return $stmt->execute();
     }
 
-    public function getAllForAdmin($page = 1, $limit = 20) {
+    public function getAllForAdmin($page = 1, $limit = 20, $search = '', $categoryFilter = null) {
         $offset = ($page - 1) * $limit;
         
         $sql = "SELECT a.*, au.name as author_name, c.name as category_name
                 FROM " . $this->table_name . " a
                 LEFT JOIN authors au ON a.author_id = au.id
                 LEFT JOIN categories c ON a.category_id = c.id
-                ORDER BY a.created_at DESC 
-                LIMIT :limit OFFSET :offset";
+                WHERE 1=1";
+        
+        $params = [];
+        
+        if (!empty($search)) {
+            $sql .= " AND (a.title LIKE :search OR a.content LIKE :search OR au.name LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+        
+        if ($categoryFilter) {
+            $sql .= " AND a.category_id = :category";
+            $params[':category'] = $categoryFilter;
+        }
+        
+        $sql .= " ORDER BY a.created_at DESC LIMIT :limit OFFSET :offset";
         
         $stmt = $this->conn->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
@@ -180,9 +198,29 @@ class Article {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAdminCount() {
-        $sql = "SELECT COUNT(*) as total FROM " . $this->table_name;
+    public function getAdminCount($search = '', $categoryFilter = null) {
+        $sql = "SELECT COUNT(*) as total FROM " . $this->table_name . " a
+                LEFT JOIN authors au ON a.author_id = au.id
+                WHERE 1=1";
+        
+        $params = [];
+        
+        if (!empty($search)) {
+            $sql .= " AND (a.title LIKE :search OR a.content LIKE :search OR au.name LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+        
+        if ($categoryFilter) {
+            $sql .= " AND a.category_id = :category";
+            $params[':category'] = $categoryFilter;
+        }
+        
         $stmt = $this->conn->prepare($sql);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'];
