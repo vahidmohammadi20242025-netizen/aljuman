@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت - مجله فرهنگی نور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <div class="admin-nav">
+                <h1>پنل مدیریت</h1>
+                <div class="admin-actions">
+                    <a href="index.html" class="back-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        بازگشت به سایت
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Admin Content -->
+        <main class="admin-main">
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="add">افزودن مقاله جدید</button>
+                <button class="tab-btn" data-tab="manage">مدیریت مقالات</button>
+                <button class="tab-btn" data-tab="stats">آمار</button>
+            </div>
+
+            <!-- Add Article Tab -->
+            <div class="tab-content active" id="addTab">
+                <form class="article-form" id="articleForm">
+                    <h2>افزودن مقاله جدید</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">عنوان مقاله *</label>
+                            <input type="text" id="title" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="author">نام نویسنده *</label>
+                            <input type="text" id="author" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="authorPhoto">آدرس تصویر نویسنده</label>
+                            <input type="url" id="authorPhoto" placeholder="https://example.com/photo.jpg">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="category">دسته‌بندی *</label>
+                            <select id="category" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="technology">فناوری</option>
+                                <option value="art">هنر</option>
+                                <option value="culture">فرهنگ</option>
+                                <option value="science">علم</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">برچسب‌ها (با کامای انگلیسی جدا کنید)</label>
+                            <input type="text" id="tags" placeholder="برنامه‌نویسی, وب, فناوری">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">متن کامل مقاله *</label>
+                        <textarea id="content" rows="10" required placeholder="متن کامل مقاله را اینجا بنویسید"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-save"></i>
+                            ذخیره مقاله
+                        </button>
+                        <button type="reset" class="reset-btn">
+                            <i class="fas fa-undo"></i>
+                            پاک کردن فرم
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Manage Articles Tab -->
+            <div class="tab-content" id="manageTab">
+                <div class="manage-header">
+                    <h2>مدیریت مقالات</h2>
+                    <div class="manage-controls">
+                        <input type="text" id="manageSearch" placeholder="جستجو در مقالات...">
+                        <select id="manageCategory">
+                            <option value="">همه دسته‌ها</option>
+                            <option value="technology">فناوری</option>
+                            <option value="art">هنر</option>
+                            <option value="culture">فرهنگ</option>
+                            <option value="science">علم</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="articles-table-container">
+                    <table class="articles-table" id="articlesTable">
+                        <thead>
+                            <tr>
+                                <th>عنوان</th>
+                                <th>نویسنده</th>
+                                <th>دسته‌بندی</th>
+                                <th>تاریخ ایجاد</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="articlesTableBody">
+                            <!-- Articles will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Stats Tab -->
+            <div class="tab-content" id="statsTab">
+                <h2>آمار سایت</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalArticles">0</h3>
+                            <p>کل مقالات</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalFavorites">0</h3>
+                            <p>مقالات علاقه‌مندی</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalCategories">4</h3>
+                            <p>دسته‌بندی‌ها</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-stats">
+                    <h3>آمار بر اساس دسته‌بندی</h3>
+                    <div class="category-chart" id="categoryChart">
+                        <!-- Category stats will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>ویرایش مقاله</h3>
+                <button class="modal-close" id="editModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <form id="editForm" class="article-form">
+                    <input type="hidden" id="editId">
+                    
+                    <div class="form-group">
+                        <label for="editTitle">عنوان مقاله</label>
+                        <input type="text" id="editTitle" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editAuthor">نام نویسنده</label>
+                            <input type="text" id="editAuthor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAuthorPhoto">آدرس تصویر نویسنده</label>
+                            <input type="url" id="editAuthorPhoto">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editCategory">دسته‌بندی</label>
+                            <select id="editCategory" required>
+                                <option value="technology">فناوری</option>
+                                <option value="art">هنر</option>
+                                <option value="culture">فرهنگ</option>
+                                <option value="science">علم</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTags">برچسب‌ها</label>
+                            <input type="text" id="editTags">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editContent">متن کامل مقاله</label>
+                        <textarea id="editContent" rows="8" required></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">ذخیره تغییرات</button>
+                        <button type="button" class="cancel-btn" onclick="closeEditModal()">انصراف</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/admin.js"></script>
